@@ -4,19 +4,25 @@
 //34. Executive appointments
 
 Legal_Practitioner::Person.
+
 Accept::Action[|
     thing=>Thing|].
+
 Executive_Appointment::Thing[|
     associated_with=>\object|].
+
 Occupation::Thing.
+
 practicing_as_lawyer:Occupation.
+
 Person[|
   primary_occupation{1..1}=>Occupation|].
 
 //34.—(1)  A legal practitioner must not accept any executive appointment associated with any of the following businesses:
 @{34(1)[section->34,paragraph->1]}
-?actor[prohibition->?_action:Accept[thing->?appointment]] :-
+?actor[prohibition->?_action[thing->?appointment]] :-
     ?actor:Legal_Practitioner,
+    ?_action:Accept,
     ?appointment:Executive_Appointment[associated_with->?business],
     ?business:Business_For_Purposes_of_s34[described_in_section1(?actor)].
 
@@ -79,7 +85,6 @@ Person[|
             from->?actor,
             to->?_commission_recipient:Person[\naf authorized],
             for->?work:Work[performed_by->?actor,legal]]
-        ]
     ).
 
 Sharing::Action[|
@@ -90,7 +95,7 @@ Sharing::Action[|
 
 Payment_of_Commission[|
     from=>Person,
-    ?to=>Person,
+    to=>Person,
     for=>Action
 |].
 
@@ -140,7 +145,7 @@ Legal_Practice::Thing[|
     ?actor:Legal_Practitioner,
     ?main_practice:Legal_Practice[jurisdiction->Singapore, member->?actor],
     ?action:Accept,
-    ?appointment:Executive_Appointment[associated_with->?other_practice],
+    ?appointment:Executive_Appointment[associated_with->?related_practice],
     ?related_practice:Legal_Practice[jurisdiction->Singapore],
     //either
     (
